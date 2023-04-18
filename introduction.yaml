@@ -1,0 +1,1561 @@
+swagger: '2.0'
+info:
+  version: '1.2'
+  title: Asset Tracking Client API
+  description: |-
+    # Introduction
+
+    Tag-N-Trac, Inc. provides customers with a full stack IoT solution by integrating multiple modes of hardware, software, and data technology to build smarter solutions that solve complex problems. Through the integration of Bluetooth and cellular technologies into assets, Tag-N-Trac, Inc. is able to automate operations and improve efficiencies throughout the logistics process. The purpose of this documentation is to guide the users on how to use the Asset Tracking Client and Data APIs.
+
+    # Overview
+
+    The API is in QA mode.
+
+    # Authentication
+
+    STEP 1 - A user needs to get a token by sending the emailId and userSecret (password) to /login endpoint
+
+    STEP 2 - Set the "clientId=Tbocs0cjhrac", set the HTTP Request Header named "Origin" to "DOC.API" and "Content-Type" to "application/json"
+
+    STEP 3 - The same token is to be passed as an HTTP Request Header named "Authorization" when invoking other endpoints
+
+    # Error Codes
+
+    200, 201 SUCCESS
+
+    400, 404 FAILURE
+
+    # Rate limit
+
+    No
+
+    # Step-by-Step Tutorials
+
+    This section explains the basics of API, its components, sample request and response.
+
+    ## Onboarding Customer to Tag-n-Trac Platform
+
+    When you have subscribed to the Tag-N-Trac, Inc. Asset Tracking platform, run the following APIs to successfully onboard to the platform.
+
+    1.Obtain an Access Token.
+
+    2.Create Projects in the Organization.
+
+    3.Creating a User.
+
+    4.(Optional) Create a Webhook.
+
+    ## Obtaining an Access Token
+
+    This tutorial explains how to log in to the Tag-N-Trac, Inc. platform and fetch a token that is to be used in other API calls.
+
+    ## Viewing Organization Details
+
+    Tag-N-Trac, Inc. creates an organization entity in their system for the client organization. This tutorial explains how the users from client organization can view their organization details.
+
+    ## Creating a First Project
+
+    Within an organization, you can create multiple projects.
+
+  contact: {}
+host: api.qa.tagntrac.io
+basePath: /
+securityDefinitions: {}
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /login:
+    post:
+      description: |-
+        Use the login API to logs in to the application.
+
+        The API loads the login page with options to specify the authentication credentials configured for the user by the organization.
+
+        If the value of your "origin" header is "DOC.API", you will get the error "Unauthorized App."
+
+        "origin" should be set to the URL of the site from which you are logging in. Valid values include "https://demo.tagntrac.io", "https://app.qa.tagntrac.io"
+      summary: login
+      tags:
+        - Authentication
+      operationId: login
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: clientId
+          in: query
+          required: true
+          type: string
+          description: A unique Client Id that Tag-N-Trac, Inc. assigns to each client.
+        - name: Origin
+          in: header
+          required: true
+          type: string
+          description: |-
+            The origin from where the request fetches the data.
+
+            The default value is: DOC.API.
+
+            **Note**: Set value to the URL of the site from which you are logging in. Valid values include "https://demo.tagntrac.io", "https://app.qa.tagntrac.io" and so on.
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: The response media type.
+        - name: body
+        - in: 
+          in: body          
+          required: true
+          type: string
+          description: |-
+            Specify the email ID and password of the user who wants to login.
+            ```
+            {
+              "emailId": "{{emailId}}",
+              "userSecret": "{{userSecret}}"
+            }
+            ```
+        - name: emailID
+          in: query
+          schema: 
+            type: string
+            example: john.russel@gmail.com
+            
+            description: The email address of the user.
+        - name: userSecret
+          in: query
+          schema: 
+            type: string
+            example: 1234@wer#
+            description: The password of the user.
+      responses:
+        '200':
+          description: The request is successful.
+          headers: {}
+        '201':
+          description: The request is successful.
+          headers: {}
+        '400':
+          description: Incorrect username or password.
+          headers: {}
+  /resetPassword:
+    post:
+      description: resetPassword
+      summary: resetPassword
+      tags:
+        - Authentication
+      operationId: resetPassword
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: |-
+            Specify the email address of the account for which you want to reset the password.
+            ```
+            {
+              "emailId": "{{emailId}}"
+            }
+            ```
+          schema:
+            example:
+              emailId: '{{emailId}}'
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /changePassword:
+    post:
+      description: changePassword
+      summary: changePassword
+      tags:
+        - Authentication
+      operationId: changePassword
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: |-
+            Specify the old and new email addresses.
+            ```
+            {
+              "oldPassword": "{{oldPassword}}"
+              "newPassword": "{{newPassword}}"
+            }
+            ```
+          schema:
+            example:
+              oldPassword: string
+              newPassword: string
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}:
+    get:
+      description: getOrganization
+      summary: getOrganization
+      tags:
+        - Organization
+      operationId: getOrganization
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    patch:
+      description: updateOrganization
+      summary: updateOrganization
+      tags:
+        - Organization
+      operationId: updateOrganization
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            example:
+              organizationType: '0'
+              organizationName: TagNTrac
+              website: https://www.tagntrac.com/
+              email: contact@tagntrac.com
+              spoc: '{{userId}}'
+              contactNo: +1 858-357-3236
+              status: Active
+              remarks: Owner of the TagNTrac Asset Tracking Ecosystem
+              createdBy: '{{userId}}'
+              address:
+                location: 4250 Executive Square UNIT 200
+                city: La Jolia
+                state: California
+                country: USA
+                zip: '92037'
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}/projects:
+    get:
+      description: getProjectsInOrganization
+      summary: getProjectsInOrganization
+      tags:
+        - Organization
+      operationId: getProjectsInOrganization
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}/users:
+    get:
+      description: getUsersInOrganization
+      summary: getUsersInOrganization
+      tags:
+        - Organization
+      operationId: getUsersInOrganization
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}/devices:
+    get:
+      description: getDevicesInOrganization
+      summary: getDevicesInOrganization
+      tags:
+        - Organization
+      operationId: getDevicesInOrganization
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: deviceType
+          in: query
+          required: true
+          type: string
+          description: ''
+        - name: page
+          in: query
+          required: true
+          type: string
+          description: ''
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}/webhooks:
+    get:
+      description: getWebhooksInOrganization
+      summary: getWebhooksInOrganization
+      tags:
+        - Organization
+      operationId: getWebhooksInOrganization
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}/assets:
+    get:
+      description: getAssetsInOrganization
+      summary: getAssetsInOrganization
+      tags:
+        - Organization
+      operationId: getAssetsInOrganization
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: assetType
+          in: query
+          required: true
+          type: string
+          description: ''
+        - name: page
+          in: query
+          required: true
+          type: string
+          description: ''
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}/rules:
+    get:
+      description: getRulesInOrganization
+      summary: getRulesInOrganization
+      tags:
+        - Organization
+      operationId: getRulesInOrganization
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}/zones:
+    get:
+      description: getZonesInOrganization
+      summary: getZonesInOrganization
+      tags:
+        - Organization
+      operationId: getZonesInOrganization
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}/auditTrail:
+    get:
+      description: getAuditTrailInOrganization
+      summary: getAuditTrailInOrganization
+      tags:
+        - Organization
+      operationId: getAuditTrailInOrganization
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}/stats:
+    get:
+      description: getStatsInOrganization
+      summary: getStatsInOrganization
+      tags:
+        - Organization
+      operationId: getStatsInOrganization
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}/devices/period:
+    get:
+      description: getDevicesNotReportingInPeriod
+      summary: getDevicesNotReportingInPeriod
+      tags:
+        - Organization
+      operationId: getDevicesNotReportingInPeriod
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: start
+          in: query
+          required: true
+          type: string
+          description: ''
+        - name: end
+          in: query
+          required: true
+          type: string
+          description: ''
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /organization/{orgId}/assetRecentdata:
+    get:
+      description: getRecentReportingAssets
+      summary: getRecentReportingAssets
+      tags:
+        - Organization
+      operationId: getRecentReportingAssets
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: orgId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /user:
+    post:
+      description: Use the **createUser** API to create a new user in the organization. You need to specify the organization ID with the API.
+      summary: createUser
+      tags:
+        - User
+      operationId: createUser
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: |-
+            ```
+            {
+              "userName": "{user_name}",
+              "slug": "{slug_name}",
+              "email": "{user_email_ID}",
+              "contact": "{user_contact_no}",
+              "avatar": "{user_avatar}",
+              "userSecret": "{user_secret_password}",
+              "organizationId": "{{orgId}}",
+              "role": "{user_role}",
+              "createdBy": "{userId}"
+            }
+            ```
+          schema:
+            example:
+              userName: Venu Gutlapalli
+              slug: venug
+              email: venug@tagntrac.com
+              contact: ''
+              avatar: ''
+              userSecret: ''
+              organizationId: '{{orgId}}'
+              role: '0'
+              createdBy: ''
+            type: string
+      responses:
+        '200':
+          description: The request is successful.
+          headers: {}
+        '201':
+          description: The request is successful.
+          headers: {}
+        '400':
+          description: User already exists.
+          headers: {}
+  /user/{userId}:
+    get:
+      description: Use the **getUser** API to retrieve the details of a user along with their project and organization details. You need to specify the user ID with the API.
+      summary: getUser
+      tags:
+        - User
+      operationId: getUser
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          description: The unique user identifier (User Id) of the user.
+      responses:
+        '200':
+          description: The request is successful.
+          headers: {}
+        '201':
+          description: The request is successful.
+          headers: {}
+        '400':
+          description: User Id not found.
+          headers: {}
+    patch:
+      description: Use the **updateUser** API to to edit the information of a user in the organization. You need to specify the user ID with the API.
+      summary: updateUser
+      tags:
+        - User
+      operationId: updateUser
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          description: The unique user identifier (User Id) of the user.
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: |-
+            ```
+            {
+              "userName": "{user_name}",
+              "slug": "{slug_name}",
+              "email": "{user_email_ID}",
+              "contact": "{user_contact_no}",
+              "avatar": "{user_avatar}",
+              "userSecret": "{user_secret_password}",
+              "organizationId": "{{orgId}}",
+              "role": "{user_role}",
+              "createdBy": "{userId}"
+            }
+            ```
+          schema:
+            example:
+              userName: Venu Gutlapalli
+              slug: venug
+              email: venug@tagntrac.com
+              contact: ''
+              avatar: ''
+              userSecret: ''
+              organizationId: '{{orgId}}'
+              role: '0'
+              createdBy: '{{userId}}'
+            type: string
+      responses:
+        '200':
+          description: The request is successful.
+          headers: {}
+        '201':
+          description: The request is successful.
+          headers: {}
+        '400':
+          description: User Id not found.
+          headers: {}
+    delete:
+      description: Use the **deleteUser** API to delete a user from the organization. You need to specify the user ID with the API.
+      summary: deleteUser
+      tags:
+        - User
+      operationId: deleteUser
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          description: The unique user identifier (User Id) of the user.
+      responses:
+        '200':
+          description: The request is successful.
+          headers: {}
+        '201':
+          description: The request is successful.
+          headers: {}
+        '400':
+          description: User Id not found.
+          headers: {}
+  /user/{userId}/avatar:
+    post:
+      description: Use the **uploadAvatar** API to upload the image file that represents the user avatar. You need to specify the user ID with the API.
+      summary: uploadAvatar
+      tags:
+        - User
+      operationId: uploadAvatar
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          description: The unique user identifier (User Id) of the user.
+        - name: file
+          in: formData
+          required: true
+          type: file
+          format: file
+          description: The image file representing the user avatar. The default file type is image/jpeg.
+      responses:
+        '200':
+          description: The request is successful.
+          headers: {}
+        '201':
+          description: The request is successful.
+          headers: {}
+        '400':
+          description: User Id not found.
+          headers: {}
+  /project:
+    post:
+      description: createProject
+      summary: createProject
+      tags:
+        - Project
+      operationId: createProject
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            example:
+              projectName: Wisconsin Vaccine Warehouse
+              shortName: Wisconsin
+              organizationId: '{{orgId}}'
+              sourceAddress:
+                location: 4250 Executive Square UNIT 200
+                city: La Jolia
+                state: California
+                country: USA
+                zip: '92037'
+              destinationAddress:
+                location: 4250 Executive Square UNIT 200
+                city: La Jolia
+                state: California
+                country: USA
+                zip: '92037'
+              createdBy: '{{userId}}'
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /project/{projectId}:
+    get:
+      description: getProject
+      summary: getProject
+      tags:
+        - Project
+      operationId: getProject
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    patch:
+      description: updateProject
+      summary: updateProject
+      tags:
+        - Project
+      operationId: updateProject
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+          description: ''
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            example:
+              projectName: ''
+              shortName: ''
+              organizationId: ''
+              createdBy: ''
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    delete:
+      description: deleteProject
+      summary: deleteProject
+      tags:
+        - Project
+      operationId: deleteProject
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /project/{projectId}/users:
+    post:
+      description: addUsersToProject
+      summary: addUsersToProject
+      tags:
+        - Project
+      operationId: addUsersToProject
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+          description: ''
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            example:
+              users:
+                - userId: '{{userId2}}'
+                  role: '0'
+              createdBy: '{{userId}}'
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    get:
+      description: getUsersInProject
+      summary: getUsersInProject
+      tags:
+        - Project
+      operationId: getUsersInProject
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    patch:
+      description: updateUsersInProject
+      summary: updateUsersInProject
+      tags:
+        - Project
+      operationId: updateUsersInProject
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          type: string
+          description: ''
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            example:
+              users:
+                - userId: '{{userId2}}'
+                  role: '0'
+              createdBy: '{{userId}}'
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /project/{projectId}/devices:
+    get:
+      description: getDevicesInProject
+      summary: getDevicesInProject
+      tags:
+        - Project
+      operationId: getDevicesInProject
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: deviceType
+          in: query
+          required: true
+          type: string
+          description: ''
+        - name: page
+          in: query
+          required: true
+          type: string
+          description: ''
+        - name: projectId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /device/{deviceId}:
+    get:
+      description: getDevice
+      summary: getDevice
+      tags:
+        - Device
+      operationId: getDevice
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /device/{deviceId}/gateway:
+    post:
+      description: provisionGateway
+      summary: provisionGateway
+      tags:
+        - Device
+      operationId: provisionGateway
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          type: string
+          description: ''
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            example:
+              gatewayType: ''
+              location: ''
+              longitude: ''
+              latitude: ''
+              projectId: ''
+              lastReading:
+                '': ''
+              attributes:
+                '': ''
+              createdBy: ''
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    get:
+      description: getGatewayInfo
+      summary: getGatewayInfo
+      tags:
+        - Device
+      operationId: getGatewayInfo
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    delete:
+      description: deprovisionGateway
+      summary: deprovisionGateway
+      tags:
+        - Device
+      operationId: deprovisionGateway
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /device/{deviceId}/asset:
+    post:
+      description: provisionAsset
+      summary: provisionAsset
+      tags:
+        - Device
+      operationId: provisionAsset
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          type: string
+          description: ''
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            example:
+              trackingId: TEST_ASSET_1
+              tuType: UNIT
+              containedUnits: {}
+              projectId: '{{projectId}}'
+              organizationId: '{{orgId}}'
+              state: ATTACHED
+              currentLocation: ''
+              lastReadBy: '{{deviceId}}'
+              shippingInfoId: '{{shippingInfoId}}'
+              createdBy: '{{userId}}'
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    delete:
+      description: deprovisionAsset
+      summary: deprovisionAsset
+      tags:
+        - Device
+      operationId: deprovisionAsset
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /devices/assets:
+    post:
+      description: provisionAssetsInBulk
+      summary: provisionAssetsInBulk
+      tags:
+        - Device
+      operationId: provisionAssetsInBulk
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    delete:
+      description: deprovisionAssetsinBulk
+      summary: deprovisionAssetsinBulk
+      tags:
+        - Device
+      operationId: deprovisionAssetsinBulk
+      deprecated: false
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /rule:
+    post:
+      description: createRule
+      summary: createRule
+      tags:
+        - Rule
+      operationId: createRule
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /rule/{ruleId}:
+    get:
+      description: getRule
+      summary: getRule
+      tags:
+        - Rule
+      operationId: getRule
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: ruleId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    patch:
+      description: updateRule
+      summary: updateRule
+      tags:
+        - Rule
+      operationId: updateRule
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: ruleId
+          in: path
+          required: true
+          type: string
+          description: ''
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    delete:
+      description: deleteRule
+      summary: deleteRule
+      tags:
+        - Rule
+      operationId: deleteRule
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: ruleId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /webhook:
+    post:
+      description: createWebhook
+      summary: createWebhook
+      tags:
+        - Webhooks
+      operationId: createWebhook
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            example:
+              url: https://webhook.site/8c0043c0-b7fa-411e-83d1-85a85162d2e4
+              headers: []
+              eventType: CATM1_TAG_DATA_AVAILABLE
+              isActive: true
+              organizationId: YjNKbllXNXBlbUYwYVc5dWU0NzgyYWQwLTkzZTAtMTFlYi1iMzgyLWIzM2UwY2ZmOGQ3ZQ==
+              createdBy: ZFhObGNnPT0xYTMzNWFmMC05M2UxLTExZWItYjM4Mi1iMzNlMGNmZjhkN2U=
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /webhook/{webhookId}:
+    get:
+      description: getWebhook
+      summary: getWebhook
+      tags:
+        - Webhooks
+      operationId: getWebhook
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: webhookId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    patch:
+      description: updateWebhook
+      summary: updateWebhook
+      tags:
+        - Webhooks
+      operationId: updateWebhook
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: webhookId
+          in: path
+          required: true
+          type: string
+          description: ''
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            example: |-
+              {
+                  "url": "",
+                  "headers": [
+                      {"key": "value"},
+                      {"key": "value"}
+                  ],
+                  "eventType" :"",
+                  "isActive": "",
+                  "organization": {{orgId}},
+                  "createdBy": {{userId}}
+              }
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    delete:
+      description: deleteWebhook
+      summary: deleteWebhook
+      tags:
+        - Webhooks
+      operationId: deleteWebhook
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: webhookId
+          in: path
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+  /config:
+    get:
+      description: getDeviceConfig
+      summary: getDeviceConfig
+      tags:
+        - Configuration
+      operationId: getDeviceConfig
+      deprecated: false
+      produces:
+        - application/json
+      parameters:
+        - name: device
+          in: query
+          required: true
+          type: string
+          description: ''
+      responses:
+        '200':
+          description: ''
+          headers: {}
+    post:
+      description: createDeviceConfig
+      summary: createDeviceConfig
+      tags:
+        - Configuration
+      operationId: createDeviceConfig
+      deprecated: false
+      produces:
+        - application/json
+      consumes:
+        - text/plain
+      parameters:
+        - name: Content-Type
+          in: header
+          required: false
+          enum:
+            - text/plain
+          type: string
+          description: ''
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema:
+            example:
+              deviceId: ''
+              payload: {}
+            type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+components:
+  schemas:
+    LoginParameters:
+      type: object
+      properties:
+        emailID:
+          type: string
+          example: john.russel@gmail.com
+          description: The email address of the user
+        userSecret:
+          type: string
+          example: 12342_$ABCD
+          description: The password of the user.
+
+
+          
+
+
+tags:
+  - name: Authentication
+    description: |-
+      To authenticate requests,TagNTrack Asset Tracking APIs use OAuth 2.0 access tokens. You can access the API server of TagNTrack with your access token.
+  - name: Organization
+    description: |-
+      An Organization is an entity which consists of a group of users. An organization stands at the top of this hierarchy.
+      Organizations can be classified as one of the following 5 types:
+
+      * The owner - Tag-N-Trac, Inc.
+      * The device manufacturer
+      * The device manager
+      * The customer
+      * The support organizations
+      
+      A client is always an organization.
+  - name: User
+    description: |-
+      The client of Tag-N-Trac, Inc. is always an organization and not an individual. Tag-N-Trac, Inc. creates an organization entity and a user who is a single point of contact of the client organization in the Tag-N-Trac, Inc. system.
+      
+      The spoc user receives the login credentials from Tag-N-Trac, Inc. and and logs in to the system to invite more users from the client organization.
+      
+      Users from any organization can create projects, zones, webhooks etc, but they cannot create devices.
+  - name: Project
+    description: |-
+      Project is an entity that includes devices that the client organization needs to manage. Users of the client organization creates one or more projects and add the required devices to these projects. Optionally, users can add other users to the project.
+  - name: Device
+    description: |-
+      Device is a hardware that is represented as a logical entity in the ecosystem.
+      
+      Tag-N-Trac, Inc. supports the following device types:
+      
+      * BLE
+      * Cat.M1
+      * BLE Gateway
+  - name: Rule
+    description: |-
+      Rules are defined as a set of standards that regulate the work flow of an entity. A user can create rules for a project, a device or for an organization.
+
+      * **Organization rules**: Applies to all the devices in the organization
+      * **Project rules**: Applies to all the devices in a specific project
+      * **Device rules**: Applies only to that specific device. For example, if the temperature of the device is rises above 100 degree Celsius then trigger an alert and send an email to the concerned user.
+  - name: Webhooks
+    description: |-
+      In an organization, Webhooks are the user defined HTTP callbacks that are sent to the configured API whenever an action occurs at organizational level.
+  - name: Configuration
+    description: ''
