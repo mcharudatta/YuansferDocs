@@ -153,9 +153,9 @@ tags:
     description: Example Secure Pay operations. 
 
 servers: 
-  - url:  https://mapi.yuansfer.com
+  - url: https://mapi.yuansfer.com
     description: Production
-  - url:  https://mapi.yuansfer.yunkeguan.com
+  - url: https://mapi.yuansfer.yunkeguan.com
     description: Sandbox
 components:
   schemas: 
@@ -363,7 +363,7 @@ paths:
               schema: 
                 type: string 
                 example: Error
-
+  
 
 
 
