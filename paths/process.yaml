@@ -19,4 +19,4 @@ post:
     content:
       application/json:
         schema:
-          $ref: ..\schemas\process.yaml
+          $ref: ../schemas/process.yaml
