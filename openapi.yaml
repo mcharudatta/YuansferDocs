@@ -180,7 +180,7 @@ components:
       bearerFormat: JWT  
 paths:
   /secure-pay:
-    $ref: paths\secure-pay.yaml  
+    $ref: .\paths\secure-pay.yaml  
   /process:
-    $ref: paths\process.yaml
+    $ref: .\paths\process.yaml
     
