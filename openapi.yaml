@@ -5,7 +5,7 @@ info:
   description: |-
     # Documentation
 
-    <embed src="../introduction/_introduction.md" />
+    <embed src="./introduction/_introduction.md" />
     
     ## Introduction
       
@@ -159,6 +159,7 @@ servers:
     description: Production
   - url: https://mapi.yuansfer.yunkeguan.com
     description: Sandbox
+
 components:
   schemas: 
     secure-pay:
