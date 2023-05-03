@@ -9,7 +9,7 @@ info:
     name: Pockyt
     url: https://mapi.Pockyt.yunkeguan.com
 
-  contact: 
+  contact:
     name: API Team
     email: n@gwocu.com  
     url: https://gwocu.com/contact
@@ -17,8 +17,11 @@ info:
 tags:
   - name: API References
     description: Example Secure Pay operations. 
-
-servers: 
+x-tagGroups:
+  - name: API References
+    tags:
+      - API References
+servers:
   - url: https://mapi.yuansfer.com
     description: Production
   - url: https://mapi.yuansfer.yunkeguan.com
