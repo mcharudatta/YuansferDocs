@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Pockyt Online Payments API's
-  version: 0.1.0
+  version: 1.0.0
   description:
     $ref: introduction/_introduction.md
 
@@ -27,9 +27,9 @@ servers:
 components:
   schemas: 
     secure-pay:
-      $ref: './schemas/secure-pay.yaml'
+      $ref: ./schemas/secure-pay.yaml
     process:
-      $ref: './schemas/process.yaml'
+      $ref: ./schemas/process.yaml
   securitySchemes:
     api_keys:
       description: |
@@ -45,7 +45,6 @@ components:
       bearerFormat: JWT  
 paths:
   /secure-pay:
-    $ref: './paths/secure-pay.yaml'
+    $ref: ./paths/secure-pay.yaml
   /process:
-    $ref: './paths/process.yaml'
-    
+    $ref: ./paths/process.yaml
